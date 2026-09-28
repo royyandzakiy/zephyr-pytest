@@ -1,0 +1,8 @@
+pyproject.toml
+src/foldering/__init__.py
+src/foldering/calc.py
+src/foldering.egg-info/PKG-INFO
+src/foldering.egg-info/SOURCES.txt
+src/foldering.egg-info/dependency_links.txt
+src/foldering.egg-info/top_level.txt
+tests/test_calc.py
