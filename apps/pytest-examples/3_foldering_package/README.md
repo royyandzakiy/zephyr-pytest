@@ -1,11 +1,13 @@
 ## To Run
 
 ```bash
-pip install -e
+pip install -e .
 pytest -vvv
 ```
 
 ## Results
+
+note: recorded before the folders were renamed, so the prompt still says `3_foldering_project`.
 
 ```bash
 root@ff4455457a36:/workspaces/zephyr-pytest/apps/pytest-examples/3_foldering_project# pip install -e .
