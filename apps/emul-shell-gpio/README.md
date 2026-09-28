@@ -6,6 +6,31 @@ A Zephyr button + LED app, and a Twister test that presses the button without an
 
 [pytest/test_gpio_toggle.py](tests/emul_button_toggle/pytest/test_gpio_toggle.py) sends `test_btn` twice through Twister's `shell` fixture and expects ON, then OFF.
 
+This is what one press looks like, and it's the part that took me the longest to get right. The callback's `printk` goes through deferred logging, so it reaches the UART after the shell prompt is already back. `exec_command` stops reading at the prompt, which is why the test has a second `readlines_until` read:
+
+```mermaid
+sequenceDiagram
+    participant P as pytest test
+    participant F as shell fixture<br/>(twister_harness)
+    participant Z as Zephyr shell
+    participant H as test_harness.c
+    participant A as main.cpp callback
+    participant L as log thread
+
+    P->>F: exec_command("test_btn")
+    F->>Z: test_btn over UART
+    Z->>H: cmd_test_button()
+    H-->>F: Test: Triggering emulated button press
+    H->>A: gpio_emul_input_set() makes an edge on sw0
+    A->>L: printk("Button pressed! ...") gets queued
+    Z-->>F: uart:~$ prompt
+    F-->>P: lines up to the prompt
+    P->>F: readlines_until("LED is now ON")
+    Note over L: wakes every 1000 ms
+    L-->>F: Button pressed! LED is now ON
+    F-->>P: the rest of the lines
+```
+
 ## Layout
 
 ```
@@ -21,7 +46,15 @@ emul-shell-gpio/
     └── pytest/             # the pytest side
 ```
 
-On the nRF5340 DK, `boards/nrf5340dk_nrf5340_cpuapp.overlay` replaces `app.overlay` rather than adding to it, and it only moves `sw0`. `led0` stays on the real LED1, so you can watch it blink while pytest asserts on the log.
+Which overlay the test image gets depends on the board. Zephyr stops looking once it finds `boards/<board>.overlay`, so on the DK that file replaces `app.overlay` rather than adding to it:
+
+```mermaid
+flowchart LR
+    B{"test image<br/>board?"} -->|native_sim| N["tests/.../app.overlay<br/>sw0 and led0 both on gpio_emul"]
+    B -->|nrf5340dk| D["tests/.../boards/nrf5340dk_nrf5340_cpuapp.overlay<br/>sw0 on gpio_emul, led0 stays on real LED1"]
+```
+
+On the DK only `sw0` moves, so you can watch LED1 blink while pytest asserts on the log.
 
 ## Build & Run the app
 

@@ -9,6 +9,19 @@ A small repo where I work out how pytest works on its own, then use it through T
 - **[apps/pytest-examples](apps/pytest-examples/README.md)** - plain Python, no Zephyr. Numbered examples that go from a bare `assert` to fixtures, `parametrize`, three ways of laying out `src/` and `tests/`, and custom markers.
 - **[apps/emul-shell-gpio](apps/emul-shell-gpio/README.md)** - a Zephyr button + LED app, plus a test image that presses the button through the GPIO emulator from a shell command (`test_btn`). pytest sends the command over the shell and checks the log line that comes back.
 
+The order I went through it, and roughly where it goes next:
+
+```mermaid
+flowchart LR
+    A["pytest on its own<br/>apps/pytest-examples"] --> B["pytest inside Twister<br/>harness: pytest + shell fixture"]
+    B --> C["native_sim<br/>no hardware needed"]
+    B --> D["nRF5340 DK<br/>--device-testing + hardware map"]
+    C -.-> E["more later"]
+    D -.-> E
+```
+
+The step from A to B is small on the pytest side. Markers, fixtures and asserts work the same, and Twister adds a `shell` fixture that talks to the board over UART. Most of the new work is on the Zephyr side: the test image, the overlays, and getting the serial timing right.
+
 ## Requirements
 
 Everything runs inside the devcontainer in [.devcontainer/](.devcontainer/devcontainer.json):
@@ -51,7 +64,7 @@ zephyr-pytest/
 
 ## Roadmap
 
-<!-- TODO: what comes next (more peripherals? CI with a self-hosted runner?) -->
+Nothing fixed yet. I'll probably keep adding things here as I explore more of what pytest and Twister can do together, so expect new apps and new numbered examples to show up, and old ones to get reshuffled.
 
 ## License
 
