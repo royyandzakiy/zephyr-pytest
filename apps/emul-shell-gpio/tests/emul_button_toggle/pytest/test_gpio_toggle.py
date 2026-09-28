@@ -1,24 +1,28 @@
-# tests/drivers/gpio_button_toggle/pytest/test_gpio_toggle.py
+# tests/emul_button_toggle/pytest/test_gpio_toggle.py
 
 import logging
+import time
+import pytest
 from twister_harness import Shell
 
 logger = logging.getLogger(__name__)
 
-# LED starts off; every press toggles, including the first. Two presses is what
-# proves it toggles rather than sets. A third would run the same path again.
-EXPECTED_STATES = ('ON', 'OFF')
-
-
-def test_gpio_button_toggle(shell: Shell):
-    for press, expected in enumerate(EXPECTED_STATES, start=1):
-        logger.info('Press %d: expecting LED %s', press, expected)
+def test_button_toggle(shell: Shell):
+    # we assume default state is OFF
+    for expected in ('ON', 'OFF'):
         lines = shell.exec_command('test_btn')
+        output = '\n'.join(lines)
 
-        assert any('Test: Triggering emulated button press' in line
-                   for line in lines), \
-            f'press {press}: shell command produced no trigger line'
+        assert 'Test: Triggering emulated button press' in output
+        assert f'Button pressed! LED is now {expected}' in output
 
-        assert any(f'Button pressed! LED is now {expected}' in line
-                   for line in lines), \
-            f'press {press}: expected LED {expected}, got {lines}'
+@pytest.mark.slow
+def test_button_toggle_slow(shell: Shell):
+    # we assume default state is OFF
+    for expected in ('ON', 'OFF'):
+        time.sleep(3) # adding this to slow things down
+        lines = shell.exec_command('test_btn')
+        output = '\n'.join(lines)
+
+        assert 'Test: Triggering emulated button press' in output
+        assert f'Button pressed! LED is now {expected}' in output

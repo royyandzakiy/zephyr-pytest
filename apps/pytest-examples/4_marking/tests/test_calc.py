@@ -5,7 +5,7 @@ from slow_calc import add, slow_add
 def test_add():
     assert add(1,2) == 3
 
-@pytest.mark.slow
+@pytest.mark.custom_slow
 def test_slow_add():
     assert slow_add(1,2) == 3
 
