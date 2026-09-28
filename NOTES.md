@@ -35,7 +35,9 @@ west twister -T apps/emul-shell-gpio/tests/emul_button_toggle -p native_sim/nati
 Build & Run
 
 ```bash
-west build -s apps/emul-shell-gpio -p always -b nrf52840dk/nrf52840 \
+west build -s apps/emul-shell-gpio -p always -b nrf5340dk/nrf52840/cpuapp \
 && west flash --runner nrfutil \
-&& python3 -m serial.tools.miniterm --raw /dev/ttyACM0 115200
+&& python3 -m serial.tools.miniterm --raw /dev/ttyACM1 115200
+
+west twister --device-testing -T apps/emul-shell-gpio/tests/emul_button_toggle --hardware-map apps/emul-shell-gpio/hardware-map.yaml
 ```

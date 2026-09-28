@@ -1,0 +1,37 @@
+# hardware-map.yaml
+#
+# This is the one file to edit for your own hardware. Twister reads `id` and
+# turns it into whatever the runner wants: --dev-id for nrfutil, --board-id for
+# pyocd, --esp-device for esp32. That is why nothing else in this repo, and no
+# workflow, needs to know your probe serial.
+#
+# Find yours with:   west twister --generate-hardware-map map.yaml
+#
+# Uncomment the block for your board and comment out the others, or set
+# `connected: false` on the ones that are not plugged in.
+
+# ======= nRF5340dk =======
+- connected: true
+  id: '1050073602'
+  platform: nrf5340dk/nrf5340/cpuapp
+  product: J-Link
+  runner: nrfutil
+  serial: /dev/ttyACM1
+
+# ======= esp32s3 ======= 
+# - connected: true
+#   id: '/dev/ttyUSB0'
+#   platform: esp32s3_devkitc/esp32s3/procpu
+#   product: ESP32-S3
+#   runner: esp32
+#   serial: /dev/ttyUSB0
+#   baud: 115200
+
+# ======= nucleo_g474re ======= 
+# - connected: true
+#   id: '0046002E3234510A37333934'
+#   platform: nucleo_g474re
+#   product: ST-LINK/V3
+#   runner: pyocd
+#   serial: /dev/ttyACM0
+#   baud: 115200

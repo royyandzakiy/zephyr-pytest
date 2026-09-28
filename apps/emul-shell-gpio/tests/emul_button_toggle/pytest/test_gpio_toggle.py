@@ -11,6 +11,9 @@ def test_button_toggle(shell: Shell):
     # we assume default state is OFF
     for expected in ('ON', 'OFF'):
         lines = shell.exec_command('test_btn')
+        lines += shell._device.readlines_until(
+            regex=f'LED is now {expected}', timeout=2
+        )
         output = '\n'.join(lines)
 
         assert 'Test: Triggering emulated button press' in output
@@ -22,6 +25,9 @@ def test_button_toggle_slow(shell: Shell):
     for expected in ('ON', 'OFF'):
         time.sleep(3) # adding this to slow things down
         lines = shell.exec_command('test_btn')
+        lines += shell._device.readlines_until(
+            regex=f'LED is now {expected}', timeout=2
+        )
         output = '\n'.join(lines)
 
         assert 'Test: Triggering emulated button press' in output
