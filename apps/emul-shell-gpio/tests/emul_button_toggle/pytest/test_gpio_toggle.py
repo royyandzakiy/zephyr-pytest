@@ -3,7 +3,7 @@
 import logging
 import time
 import pytest
-from twister_harness import Shell
+from twister_harness import Shell, DeviceAdapter
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +26,18 @@ def test_button_toggle_slow(shell: Shell):
         time.sleep(3) # adding this to slow things down
         lines = shell.exec_command('test_btn')
         lines += shell._device.readlines_until(
+            regex=f'LED is now {expected}', timeout=2
+        )
+        output = '\n'.join(lines)
+
+        assert 'Test: Triggering emulated button press' in output
+        assert f'Button pressed! LED is now {expected}' in output
+
+def test_button_toggle_dut(dut: DeviceAdapter):
+    # we assume default state is OFF
+    for expected in ('ON', 'OFF'):
+        lines = dut.write('test_btn')
+        lines += dut.readlines_until(
             regex=f'LED is now {expected}', timeout=2
         )
         output = '\n'.join(lines)
