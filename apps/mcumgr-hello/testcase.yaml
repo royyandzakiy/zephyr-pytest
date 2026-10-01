@@ -1,0 +1,17 @@
+tests:
+  mcumgr.firmware_update:
+    sysbuild: true
+    # Needs real hardware with MCUboot and two image slots.
+    platform_allow:
+      - nrf5340dk/nrf5340/cpuapp
+      - esp32s3_devkitc/esp32s3/procpu
+    integration_platforms:
+      - nrf5340dk/nrf5340/cpuapp
+      - esp32s3_devkitc/esp32s3/procpu
+    # covers building the second image and the MCUboot swap
+    timeout: 600
+    tags:
+      - pytest
+      - mcuboot
+      - mcumgr
+    harness: pytest

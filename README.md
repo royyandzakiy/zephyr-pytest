@@ -8,6 +8,17 @@ A small repo where I work out how pytest works on its own, then use it through T
 
 - **[apps/pytest-examples](apps/pytest-examples/README.md)** - plain Python, no Zephyr. Numbered examples that go from a bare `assert` to fixtures, `parametrize`, three ways of laying out `src/` and `tests/`, and custom markers.
 - **[apps/emul-shell-gpio](apps/emul-shell-gpio/README.md)** - a Zephyr button + LED app, plus a test image that presses the button through the GPIO emulator from a shell command (`test_btn`). pytest sends the command over the shell and checks the log line that comes back.
+- **[apps/mcumgr-hello](apps/mcumgr-hello/README.md)** - a hello world with MCUboot and MCUmgr. pytest builds an UPDATED image, uploads it over MCUmgr, and checks that MCUboot boots it. Set up for the nRF5340 DK and the ESP32-S3.
+
+## Two ways to lay out a Zephyr pytest test
+
+| | Separate test image | Test next to the app |
+|---|---|---|
+| Layout | `app/tests/<suite>/` with its own `CMakeLists.txt`, `prj.conf`, `testcase.yaml`, `pytest/` | `app/testcase.yaml` + `app/pytest/`, one `CMakeLists.txt` |
+| Use when | the test needs code or config that must not ship (backdoor commands, emulated peripherals) | you're testing the firmware as it ships |
+| Example | [emul-shell-gpio](apps/emul-shell-gpio/README.md) | [mcumgr-hello](apps/mcumgr-hello/README.md) |
+
+Zephyr's own `tests/` folder follows the first pattern, and its samples with a `pytest/` folder follow the second.
 
 The order I went through it, and roughly where it goes next:
 
@@ -51,7 +62,8 @@ The first one is plain pytest. The second one builds the Zephyr test image, boot
 zephyr-pytest/
 ├── .devcontainer/          # container config, plus a no-USB variant for macOS
 ├── apps/
-│   ├── emul-shell-gpio/    # Zephyr app + Twister/pytest test
+│   ├── emul-shell-gpio/    # Zephyr app + separate test image under tests/
+│   ├── mcumgr-hello/       # Zephyr app tested as it ships, pytest/ next to it
 │   └── pytest-examples/    # plain pytest examples, read in number order
 └── NOTES.md                # my scratch build/flash commands per board
 ```
@@ -59,7 +71,7 @@ zephyr-pytest/
 ## Limitations
 
 - Only run inside the Linux devcontainer. I haven't tried a native Windows or macOS Zephyr install.
-- On real hardware, only the nRF5340 DK has been through Twister. ESP32-S3 and Nucleo G474RE are in `platform_allow` and in `hardware-map.yaml`, but commented out there, so treat them as untried.
+- On real hardware, Twister has run on the nRF5340 DK and the ESP32-S3. The Nucleo G474RE is in `platform_allow` and `hardware-map.yaml`, but untried.
 - There is no CI yet. Everything here was run by hand.
 
 ## Roadmap
