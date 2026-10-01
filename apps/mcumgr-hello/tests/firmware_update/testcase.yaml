@@ -3,7 +3,9 @@ tests:
     build_only: false
     sysbuild: true
     # MCUboot + serial SMP needs a real board with two image slots, so no
-    # native_sim here. Only the nRF5340 DK is set up in hardware-map.yaml.
+    # native_sim here. Both boards below are set up in hardware-map.yaml;
+    # uncomment the one that is plugged in.
+    # The nRF5340 DK only boots MCUboot with sysbuild/mcuboot.conf.
     platform_allow:
       - nrf5340dk/nrf5340/cpuapp
       - esp32s3_devkitc/esp32s3/procpu
