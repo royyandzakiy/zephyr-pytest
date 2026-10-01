@@ -1,6 +1,5 @@
-// tests/drivers/gpio_button_toggle/test_harness.c
-//
-// The backdoor. Compiled into the test image only, never into the app.
+// Test-only shell command that presses the emulated button.
+// Built into the test image only, never into the app.
 
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
@@ -30,14 +29,12 @@ void trigger_emulated_button_press(void)
     gpio_emul_input_set(button.port, button.pin, inactive);
 }
 
-/* Shell command */
 static int cmd_test_button(const struct shell *sh, size_t argc, char **argv)
 {
     ARG_UNUSED(argc);
     ARG_UNUSED(argv);
 
-    /* Shares the shell's TX path, so it cannot split the echo of the
-     * command that invoked it. */
+    /* shell_print, not printk, so the line can't interleave with the shell echo. */
     shell_print(sh, "Test: Triggering emulated button press");
 
     trigger_emulated_button_press();

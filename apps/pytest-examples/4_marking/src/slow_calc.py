@@ -1,4 +1,4 @@
-# src/calc.py
+# src/slow_calc.py
 import time
 
 def add(a,b):

@@ -8,7 +8,7 @@ tests:
     integration_platforms:
       - nrf5340dk/nrf5340/cpuapp
       - esp32s3_devkitc/esp32s3/procpu
-    # covers building the second image and the MCUboot swap
+    # long enough to build the UPDATED image and wait for the MCUboot swap
     timeout: 600
     tags:
       - pytest

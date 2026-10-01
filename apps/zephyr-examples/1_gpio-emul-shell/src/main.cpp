@@ -1,11 +1,9 @@
-// src/main.c
-
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/sys/printk.h>
 
-/* Button definition - works for BOTH physical and emulated */
+/* Same code for a physical or an emulated button, picked by the sw0 alias. */
 #define BUTTON_NODE DT_ALIAS(sw0)
 static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET(BUTTON_NODE, gpios);
 

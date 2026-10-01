@@ -1,4 +1,4 @@
-# tests/drivers/gpio_button_toggle/CMakeLists.txt
+# Test image: the app's main.cpp plus the test-only shell command.
 
 cmake_minimum_required(VERSION 3.20.0)
 

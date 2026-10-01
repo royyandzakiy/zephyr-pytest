@@ -1,4 +1,3 @@
-/* src/main.cpp */
 #include <zephyr/kernel.h>
 
 #ifndef FIRMWARE_VERSION
