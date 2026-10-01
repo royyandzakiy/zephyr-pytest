@@ -7,8 +7,8 @@ A small repo where I work out how pytest works on its own, then use it through T
 ## What's inside
 
 - **[apps/pytest-examples](apps/pytest-examples/README.md)** - plain Python, no Zephyr. Numbered examples that go from a bare `assert` to fixtures, `parametrize`, three ways of laying out `src/` and `tests/`, and custom markers.
-- **[apps/emul-shell-gpio](apps/emul-shell-gpio/README.md)** - a Zephyr button + LED app, plus a test image that presses the button through the GPIO emulator from a shell command (`test_btn`). pytest sends the command over the shell and checks the log line that comes back.
-- **[apps/mcumgr-hello](apps/mcumgr-hello/README.md)** - a hello world with MCUboot and MCUmgr. pytest builds an UPDATED image, uploads it over MCUmgr, and checks that MCUboot boots it. Set up for the nRF5340 DK and the ESP32-S3.
+- **[apps/zephyr-examples/1_gpio-emul-shell](apps/zephyr-examples/1_gpio-emul-shell/README.md)** - a Zephyr button + LED app, plus a test image that presses the button through the GPIO emulator from a shell command (`test_btn`). pytest sends the command over the shell and checks the log line that comes back.
+- **[apps/zephyr-examples/2_mcumgr-dfu](apps/zephyr-examples/2_mcumgr-dfu/README.md)** - a hello world with MCUboot and MCUmgr. pytest builds an UPDATED image, uploads it over MCUmgr, and checks that MCUboot boots it. Set up for the nRF5340 DK and the ESP32-S3.
 
 ## Two ways to lay out a Zephyr pytest test
 
@@ -16,7 +16,7 @@ A small repo where I work out how pytest works on its own, then use it through T
 |---|---|---|
 | Layout | `app/tests/<suite>/` with its own `CMakeLists.txt`, `prj.conf`, `testcase.yaml`, `pytest/` | `app/testcase.yaml` + `app/pytest/`, one `CMakeLists.txt` |
 | Use when | the test needs code or config that must not ship (backdoor commands, emulated peripherals) | you're testing the firmware as it ships |
-| Example | [emul-shell-gpio](apps/emul-shell-gpio/README.md) | [mcumgr-hello](apps/mcumgr-hello/README.md) |
+| Example | [1_gpio-emul-shell](apps/zephyr-examples/1_gpio-emul-shell/README.md) | [2_mcumgr-dfu](apps/zephyr-examples/2_mcumgr-dfu/README.md) |
 
 Zephyr's own `tests/` folder follows the first pattern, and its samples with a `pytest/` folder follow the second.
 
@@ -51,10 +51,10 @@ cd apps/pytest-examples/2_fixture && pytest -v && cd -
 ```
 
 ```bash
-west twister -T apps/emul-shell-gpio/tests/emul_button_toggle -p native_sim/native
+west twister -T apps/zephyr-examples/1_gpio-emul-shell/tests/emul_button_toggle -p native_sim/native
 ```
 
-The first one is plain pytest. The second one builds the Zephyr test image, boots it on `native_sim`, and runs `tests/emul_button_toggle/pytest/` against its shell. Running it on the DK is in the [emul-shell-gpio README](apps/emul-shell-gpio/README.md).
+The first one is plain pytest. The second one builds the Zephyr test image, boots it on `native_sim`, and runs `tests/emul_button_toggle/pytest/` against its shell. Running it on the DK is in the [1_gpio-emul-shell README](apps/zephyr-examples/1_gpio-emul-shell/README.md).
 
 ## Project structure
 
@@ -62,9 +62,10 @@ The first one is plain pytest. The second one builds the Zephyr test image, boot
 zephyr-pytest/
 ├── .devcontainer/          # container config, plus a no-USB variant for macOS
 ├── apps/
-│   ├── emul-shell-gpio/    # Zephyr app + separate test image under tests/
-│   ├── mcumgr-hello/       # Zephyr app tested as it ships, pytest/ next to it
-│   └── pytest-examples/    # plain pytest examples, read in number order
+│   ├── pytest-examples/        # plain pytest examples, read in number order
+│   └── zephyr-examples/        # Zephyr apps tested with Twister + pytest, read in number order
+│       ├── 1_gpio-emul-shell/  # separate test image under tests/
+│       └── 2_mcumgr-dfu/       # tested as it ships, pytest/ next to the app
 └── NOTES.md                # my scratch build/flash commands per board
 ```
 

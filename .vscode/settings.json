@@ -10,7 +10,7 @@
         "editor.formatOnSave": true
     },
     "nrf-connect.applications": [
-        "${workspaceFolder}/apps/emul-shell-gpio"
+        "${workspaceFolder}/apps/zephyr-examples/1_gpio-emul-shell",
+        "${workspaceFolder}/apps/zephyr-examples/2_mcumgr-dfu"
     ],
-    "cmake.sourceDirectory": "C:/project-coding/iot/projects/zephyr-project-template/apps/emul-shell-gpio",
 }

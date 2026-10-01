@@ -59,6 +59,6 @@ flowchart LR
 
 `-m` filters before anything runs, so a deselected test only appears as a count in the summary line (`1 deselected`). `skip` and `xfail` are decided per test and show up as their own results.
 
-`4_marking` is the one that carries over to the Zephyr side: [emul-shell-gpio](../emul-shell-gpio/README.md) uses a `slow` marker the same way, passed through Twister with `--pytest-args="-m slow"`.
+`4_marking` is the one that carries over to the Zephyr side: [1_gpio-emul-shell](../zephyr-examples/1_gpio-emul-shell/README.md) uses a `slow` marker the same way, passed through Twister with `--pytest-args="-m slow"`.
 
 I'll probably add more folders here as I try other parts of pytest, so the numbering will keep growing.

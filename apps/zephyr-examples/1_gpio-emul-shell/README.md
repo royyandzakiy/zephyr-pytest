@@ -1,4 +1,4 @@
-# emul-shell-gpio
+# 1_gpio-emul-shell
 
 A Zephyr button + LED app, and a Twister test that presses the button without anyone touching the board.
 
@@ -34,7 +34,7 @@ sequenceDiagram
 ## Layout
 
 ```
-emul-shell-gpio/
+1_gpio-emul-shell/
 ├── src/main.cpp            # the app
 ├── boards/                 # app overlays per board (led0 / sw0 aliases)
 ├── hardware-map.yaml       # which probe and serial port Twister uses
@@ -60,16 +60,16 @@ On the DK only `sw0` moves, so you can watch LED1 blink while pytest asserts on 
 
 ```bash
 # native_sim
-west build -s apps/emul-shell-gpio -d build -p always -b native_sim/native \
+west build -s apps/zephyr-examples/1_gpio-emul-shell -d build -p always -b native_sim/native \
 && ./build/zephyr/zephyr.exe
 
 # nRF5340 DK
-west build -s apps/emul-shell-gpio -p always -b nrf5340dk/nrf5340/cpuapp \
+west build -s apps/zephyr-examples/1_gpio-emul-shell -p always -b nrf5340dk/nrf5340/cpuapp \
 && west flash --runner nrfutil \
 && python3 -m serial.tools.miniterm --raw /dev/ttyACM1 115200
 
 # ESP32-S3
-west build -s apps/emul-shell-gpio -p always -b esp32s3_devkitc/esp32s3/procpu --no-sysbuild \
+west build -s apps/zephyr-examples/1_gpio-emul-shell -p always -b esp32s3_devkitc/esp32s3/procpu --no-sysbuild \
 && west flash --runner esp32 --esp-device /dev/ttyUSB0 \
 && python3 -m serial.tools.miniterm --raw /dev/ttyUSB0 115200
 ```
@@ -86,10 +86,10 @@ If `build/` was ever made by a Windows host build, delete it first. The cache ke
 
 ```bash
 # normal tests
-west twister -T apps/emul-shell-gpio/tests/emul_button_toggle -p native_sim/native
+west twister -T apps/zephyr-examples/1_gpio-emul-shell/tests/emul_button_toggle -p native_sim/native
 
 # slow tests
-west twister -T apps/emul-shell-gpio/tests/emul_button_toggle \
+west twister -T apps/zephyr-examples/1_gpio-emul-shell/tests/emul_button_toggle \
   -p native_sim/native \
   --pytest-args="-m slow"
 ```
@@ -131,15 +131,15 @@ Stopped at 6.300s
 ### nRF5340dk
 
 ```bash
-west twister -T apps/emul-shell-gpio/tests/emul_button_toggle -p nrf5340dk/nrf5340/cpuapp --device-testing --device-serial /dev/ttyACM0
+west twister -T apps/zephyr-examples/1_gpio-emul-shell/tests/emul_button_toggle -p nrf5340dk/nrf5340/cpuapp --device-testing --device-serial /dev/ttyACM0
 
-west twister -T apps/emul-shell-gpio/tests/emul_button_toggle --device-testing --hardware-map apps/emul-shell-gpio/hardware-map.yaml
+west twister -T apps/zephyr-examples/1_gpio-emul-shell/tests/emul_button_toggle --device-testing --hardware-map apps/zephyr-examples/1_gpio-emul-shell/hardware-map.yaml
 ```
 
 Result: we can see the 3 second break in the slow test
 
 ```bash
-2026-09-28 14:23:46,418 apps/emul-shell-gpio/tests/emul_button_toggle/pytest/test_gpio_toggle.py::test_button_toggle
+2026-09-28 14:23:46,418 apps/zephyr-examples/1_gpio-emul-shell/tests/emul_button_toggle/pytest/test_gpio_toggle.py::test_button_toggle
 2026-09-28 14:23:52,372 -------------------------------- live log call ---------------------------------
 2026-09-28 14:23:52,373 #: uart:~$ uart:~$ test_btn
 2026-09-28 14:23:52,375 #: Test: Triggering emulated button press
@@ -150,7 +150,7 @@ Result: we can see the 3 second break in the slow test
 2026-09-28 14:23:53,540 #: uart:~$
 2026-09-28 14:23:54,498 #: uart:~$ Button pressed! LED is now OFF
 2026-09-28 14:23:54,684 PASSED
-2026-09-28 14:23:54,852 apps/emul-shell-gpio/tests/emul_button_toggle/pytest/test_gpio_toggle.py::test_button_toggle_slow
+2026-09-28 14:23:54,852 apps/zephyr-examples/1_gpio-emul-shell/tests/emul_button_toggle/pytest/test_gpio_toggle.py::test_button_toggle_slow
 2026-09-28 14:24:03,304 -------------------------------- live log call ---------------------------------
 2026-09-28 14:24:03,306 #: uart:~$ uart:~$ test_btn
 2026-09-28 14:24:03,308 #: Test: Triggering emulated button press
