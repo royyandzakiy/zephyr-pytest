@@ -1,11 +1,19 @@
 tests:
-  drivers.gpio.button_toggle:
+  mcumgr.firmware_update:
     build_only: false
+    sysbuild: true
+    # MCUboot + serial SMP needs a real board with two image slots, so no
+    # native_sim here. Only the nRF5340 DK is set up in hardware-map.yaml.
     platform_allow:
       - nrf5340dk/nrf5340/cpuapp
-      - nucleo_g474re
       - esp32s3_devkitc/esp32s3/procpu
-      - native_sim
-    # TEST SELECTION
-    # 1. Test using pytest/test_shell.py
+    integration_platforms:
+      - nrf5340dk/nrf5340/cpuapp
+      - esp32s3_devkitc/esp32s3/procpu
+    # the test builds a second image and waits for an MCUboot swap
+    timeout: 600
+    tags:
+      - pytest
+      - mcuboot
+      - mcumgr
     harness: pytest

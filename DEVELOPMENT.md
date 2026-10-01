@@ -1,0 +1,2 @@
+- get mcumgr update to work
+- upgrade to implement signed firmware, and signed checking
